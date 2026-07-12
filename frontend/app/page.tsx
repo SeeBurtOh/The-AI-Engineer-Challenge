@@ -3,9 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 
-// Where the FastAPI backend lives. Locally this is http://127.0.0.1:8000.
-// When deployed, you can override it by setting NEXT_PUBLIC_API_URL.
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+// Where the FastAPI backend lives.
+// - Local dev: defaults to http://127.0.0.1:8000 (separate uvicorn process).
+// - Vercel production: defaults to "" (same origin), so fetch hits /api/chat
+//   on the deployed domain via the vercel.json route to api/index.py.
+// - Override anytime with NEXT_PUBLIC_API_URL in .env.local or Vercel dashboard.
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ??
+  (process.env.NODE_ENV === "production" ? "" : "http://127.0.0.1:8000");
 
 // A kind, in-character message shown if the backend can't be reached
 // or returns an error.
