@@ -1,0 +1,43 @@
+/* Global styles: the cozy nighttime base that everything sits on. */
+
+:root {
+  /* Deep navy/indigo night-sky palette */
+  --night-sky: #10142c;
+  --night-sky-deep: #0a0d1f;
+  --card-bg: #1c2145;
+  --card-border: #2e3563;
+  --user-card-bg: #262c58;
+  --moonlight: #f2ead9; /* warm off-white for story text */
+  --starlight: #b8b3d9; /* muted lavender for secondary text */
+  --moon-gold: #f5d491; /* accent — the moon's glow */
+  --error-rose: #f0b9c4;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--moonlight);
+  /* Subtle vertical gradient so the sky feels deeper toward the bottom */
+  background: linear-gradient(180deg, var(--night-sky) 0%, var(--night-sky-deep) 100%);
+  background-attachment: fixed;
+  font-family: var(--font-ui), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}

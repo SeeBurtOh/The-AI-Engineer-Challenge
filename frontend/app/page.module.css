@@ -1,0 +1,194 @@
+/* Layout: header on top, scrollable conversation in the middle,
+   input bar pinned to the bottom. Fills the whole screen height. */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh; /* dvh handles mobile browser toolbars gracefully */
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  text-align: center;
+  padding: 1.25rem 0 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.moon {
+  font-size: 1.5rem;
+  display: inline-block;
+}
+
+.stars {
+  font-size: 0.8rem;
+  color: var(--moon-gold);
+  margin-left: 0.35rem;
+  letter-spacing: 0.2em;
+}
+
+.title {
+  font-family: var(--font-story), serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--moon-gold);
+  margin-top: 0.25rem;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--starlight);
+  margin-top: 0.15rem;
+}
+
+/* ---------- Conversation ---------- */
+
+.conversation {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem 0;
+}
+
+.emptyState {
+  color: var(--starlight);
+  font-family: var(--font-story), serif;
+  font-style: italic;
+  text-align: center;
+  margin: auto;
+  max-width: 34ch;
+  line-height: 1.7;
+}
+
+/* Shared card look; the variants below adjust color and alignment. */
+.storyCard,
+.userCard,
+.errorCard {
+  border-radius: 1rem;
+  padding: 1rem 1.15rem;
+  line-height: 1.75;
+  white-space: pre-wrap; /* keep the story's paragraph breaks */
+  word-wrap: break-word;
+}
+
+/* The storyteller's reply: a soft storybook card in a warm serif. */
+.storyCard {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  font-family: var(--font-story), serif;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  align-self: flex-start;
+  max-width: 95%;
+}
+
+/* The user's request: smaller, tucked to the right. */
+.userCard {
+  background: var(--user-card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--starlight);
+  font-size: 0.95rem;
+  align-self: flex-end;
+  max-width: 85%;
+}
+
+/* Errors: same soft card, tinted rose, still gentle. */
+.errorCard {
+  background: var(--card-bg);
+  border: 1px solid var(--error-rose);
+  color: var(--error-rose);
+  font-family: var(--font-story), serif;
+  font-style: italic;
+  align-self: flex-start;
+  max-width: 95%;
+}
+
+/* The "dreaming" indicator, with a slow, sleepy pulse. */
+.dreaming {
+  color: var(--starlight);
+  font-family: var(--font-story), serif;
+  font-style: italic;
+  text-align: center;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---------- Input bar ---------- */
+
+.inputBar {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.75rem 0 max(0.75rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--card-border);
+}
+
+.input {
+  flex: 1;
+  min-width: 0; /* lets the input shrink properly on narrow phones */
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-size: 1rem;
+  color: var(--moonlight);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--starlight);
+  opacity: 0.8;
+}
+
+.input:focus {
+  border-color: var(--moon-gold);
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+.sendButton {
+  background: var(--moon-gold);
+  color: var(--night-sky-deep);
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.sendButton:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.sendButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Slightly tighter spacing on small phone screens. */
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.35rem;
+  }
+
+  .storyCard {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+}
