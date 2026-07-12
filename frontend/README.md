@@ -51,10 +51,12 @@ NEXT_PUBLIC_API_URL=https://your-backend.example.com
 ## Deploying to Vercel (with the FastAPI backend)
 
 This repo is set up for a **single Vercel project** at the repository root
-(not the `frontend/` folder). The root `vercel.json` builds both services:
+(not the `frontend/` folder). The root `vercel.json` uses **Vercel Services**
+to build and route both apps on one domain:
 
 - `frontend/` → Next.js app (pages, static assets)
-- `api/index.py` → FastAPI serverless function (`/api/chat`, etc.)
+- `api/index.py` → FastAPI backend (`/api/chat`, etc.), with a 60s timeout
+  for story generation
 
 From the **repository root**, run:
 

@@ -1,0 +1,7 @@
+# Python dependencies for the Vercel backend service (root: api/).
+# Kept in sync with the repo-root requirements.txt used for local uv dev.
+fastapi>=0.121.2
+uvicorn>=0.38.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
