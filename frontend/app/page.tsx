@@ -38,6 +38,18 @@ export default function Home() {
     const message = input.trim();
     if (!message || isLoading) return;
 
+    // Build the conversation history to send along, so the storyteller
+    // remembers earlier turns. Error cards are skipped (they're only
+    // shown locally), and we keep just the most recent 10 messages so
+    // the request stays small.
+    const history = messages
+      .filter((msg) => msg.role !== "error")
+      .map((msg) => ({
+        role: msg.role === "user" ? ("user" as const) : ("assistant" as const),
+        content: msg.text,
+      }))
+      .slice(-10);
+
     // Show the user's request right away, then ask the backend for a story.
     setMessages((prev) => [...prev, { role: "user", text: message }]);
     setInput("");
@@ -47,7 +59,7 @@ export default function Home() {
       const response = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message, history }),
       });
 
       if (!response.ok) {
