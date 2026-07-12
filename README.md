@@ -309,9 +309,25 @@ Then rerun your vibe check and document:
 
 ---
 
-**Adjustments Made:**  
+**Adjustments Made:**
 
-**Results:**  
+Our Activity #3 vibe check exposed that the app had **no memory across turns** — asked to "continue the exact story you just told me," it admitted (in character) that it couldn't recall the previous story at all. The cause was architectural: the frontend sent only the newest message, and the backend forwarded just that single message to OpenAI. Since the OpenAI API is stateless, the model's entire world on each request was the system prompt plus one message — the earlier conversation simply never reached it.
+
+**The fix — send the conversation history with every request:**
+
+- **Backend (**`api/index.py`**):** `ChatRequest` now accepts an optional `history` field — a list of prior turns, each validated as `{role: "user" | "assistant", content: str}` via a new Pydantic `HistoryMessage` model. The OpenAI messages list is now assembled as: system prompt → prior conversation in order → the new user message. The `history: list[HistoryMessage] = []` default keeps the endpoint fully backward-compatible (a bare `{"message": "..."}` request behaves exactly as before).
+- **Frontend (**`frontend/app/page.tsx`**):** before each send, the existing on-screen messages state is converted into that history format (mapping the app's roles/fields to OpenAI's `user`/`assistant` + `content`), error cards are filtered out so failures never enter the model's "memory," and the list is capped with `.slice(-10)` to the most recent 10 messages so requests stay small and within the context window.
+**Results — the same failed test, re-run:**
+
+*Before (from Activity #3):* asked to continue its previous story, the app responded: "Ah... the night wind hasn't carried that page back to me yet... if you'll share the very last sentence you remember, I can pick up the silver thread..." — an honest admission, but no memory.
+
+*After:* we asked for a fresh story ("a lighthouse keeper and her cat"), which introduced Keeper Elara, her cat Mallow, and a skiff lost in the fog, ending on "the first pink thread of dawn was pulled through the hem of the sea." Then we sent the identical follow-up: **"Continue the exact story you just told me, picking up from the last sentence."**
+
+The continuation (after the fix) The first pink thread brightened to a whole seam of day, and the lighthouse wore it like a rosy scarf. Elara dimmed the wick to a warm ember... Mallow stretched into a long gray ribbon of cat... By midmorning, a soft tap-rap came at the blue door. On the stoop sat a willow basket lined with a tea towel, still warm with village bread. Tucked inside was a folded note... "For last night's light. Lost the channel and found your beam. Home safe, thanks to you." No name, only a little sketch of a skiff with a smiling moon above it... And the moral, dear dreamer, is that quiet kindness and careful tending by ordinary hearts turn each dawn into a thank-you and each night into a safe harbor.
+
+The continuation picked up **literally from the final sentence** ("the first pink thread" of dawn), kept both named characters (Elara and Mallow), and even resolved a plot thread from part one — the skiff saved in the fog returned as an anonymous thank-you note signed with a sketch of a skiff. That is genuine recall of specific prior-story details, not a generic new tale.
+
+**Conclusion:** the memory capability gap identified in Activity #3 is closed for multi-turn storytelling (within the last-10-messages window we send). The remaining documented gaps — real-time data and external tools — still stand, and would be the natural next improvements (a web-search tool and a page-fetch/retrieval step).
 
 ---
 
