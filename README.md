@@ -136,7 +136,7 @@ Think of it as a **first pass to catch obvious issues** before deeper evaluation
 
 **App:** *Once Upon a Prompt* — a bedtime-storyteller LLM app that answers any question or topic by weaving it into a soothing, factually-grounded bedtime story that ends with a one-line moral.
 
-The goal of this vibe check is to probe what the app does well, where it shines beyond expectations, and where its real limits are. Full model responses are included in collapsible sections so this stays readable.
+The goal of this vibe check is to probe what the app does well, where it shines beyond expectations, and where its real limits are. Full model responses are included.
 
 ---
 
