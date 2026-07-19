@@ -118,7 +118,7 @@ You'll want to make sure you share you *domains* hyperlink to ensure people can 
 
 image
 
-> NOTE: Test this is the public link by trying to open your newly deployed site in an Incognito browser tab!
+> NOTE: https://once-upon-a-prompt-sigma.vercel.app/
 
 🧪 Vibe Check Your LLM App
 
